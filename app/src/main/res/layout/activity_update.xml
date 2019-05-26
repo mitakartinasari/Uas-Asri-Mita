@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_update"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context="com.mitakartinasari.uasbisa.MainActivity">
+    tools:context="com.mitakartinasari.uasbisa.UpdateActivity">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -17,6 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/npm"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -48,7 +52,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="3dp"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,15 +80,10 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/buttonDaftar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register"/>
+        android:id="@+id/buttonUbah"
 
-    <Button
-        android:id="@+id/buttonLihat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view"/>
+        android:text="UBAH"/>
 
 </LinearLayout>

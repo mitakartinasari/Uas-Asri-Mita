@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -18,7 +19,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity {
 
     public static final String URL = "http://mitasri.000webhostapp.com/";
     private RadioButton radioSexButton;
@@ -26,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.radioSesi)
     RadioGroup radioGroup;
+    @BindView(R.id.radioPagi) RadioButton radioButtonPagi;
+    @BindView(R.id.radioSiang) RadioButton radioButtonSiang;
     @BindView(R.id.editTextNPM)
     EditText editTextNPM;
-    @BindView(R.id.editTextNama)
-    EditText editTextNama;
-    @BindView(R.id.editTextKelas)
-    EditText editTextKelas;
+    @BindView(R.id.editTextNama) EditText editTextNama;
+    @BindView(R.id.editTextKelas) EditText editTextKelas;
 
-    @OnClick(R.id.buttonDaftar) void daftar() {
+    @OnClick(R.id.buttonUbah) void ubah() {
         //membuat progress dialog
         progress = new ProgressDialog(this);
         progress.setCancelable(false);
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RegisterAPI api = retrofit.create(RegisterAPI.class);
-        Call<Value> call = api.daftar(npm, nama, kelas, sesi);
+        Call<Value> call = api.ubah(npm, nama, kelas, sesi);
         call.enqueue(new Callback<Value>() {
             @Override
             public void onResponse(Call<Value> call, Response<Value> response) {
@@ -63,16 +64,18 @@ public class MainActivity extends AppCompatActivity {
                 String message = response.body().getMessage();
                 progress.dismiss();
                 if (value.equals("1")) {
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateActivity.this, message, Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Value> call, Throwable t) {
+                t.printStackTrace();
                 progress.dismiss();
-                Toast.makeText(MainActivity.this, "Jaringan Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateActivity.this, "Jaringan Error!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -80,12 +83,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_update);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Ubah Data");
+
+        Intent intent = getIntent();
+        String npm = intent.getStringExtra("npm");
+        String nama = intent.getStringExtra("nama");
+        String kelas = intent.getStringExtra("kelas");
+        String sesi = intent.getStringExtra("sesi");
+
+        editTextNPM.setText(npm);
+        editTextNama.setText(nama);
+        editTextKelas.setText(kelas);
+
+        if (sesi.equals("Pagi (09.00-11.00 WIB)")) {
+            radioButtonPagi.setChecked(true);
+        } else {
+            radioButtonSiang.setChecked(true);
+        }
     }
 
-    @OnClick(R.id.buttonLihat) void lihat() {
-        startActivity(new Intent(MainActivity.this, ViewActivity.class));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
-
